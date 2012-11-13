@@ -14,4 +14,4 @@ app.post("/operations", function(req, res){
 	res.end();
 });
 
-app.listen(5000 || process.env.PORT);
+app.listen(process.env.PORT || 5000);

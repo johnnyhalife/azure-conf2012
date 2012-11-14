@@ -17,13 +17,54 @@
 	
 	<script type="text/javascript">
 		// here goes the fun part
+		
+		var loadMural = function() {
+			jQuery.get("/murals/m", function(a, b, c){
+				window.title = a.mural;
+		
+				jQuery(".widget").css('background-color', a.widgets['1'].color)
+												 .css('top', a.widgets['1'].y)
+												 .css('left', a.widgets['1'].x);
+			});
+		};
+		
 		var notifyPositionChange = function(e) {
-			console.log(e);
+			var opX = { id: 1, propertyName: 'x', propertyValue: e.x };
+			var opY = { id: 1, propertyName: 'y', propertyValue: e.y };
+
+			submitOperation(opX);
+			submitOperation(opY);
 		};
 		
 		var notifyBackgroundChange = function(e){
-			console.log(e);
+			var op = {id: 1, propertyName: 'color', propertyValue: e.color };
+			submitOperation(op);
 		};
+
+		var operations = [];
+
+		var submitOperation = function(payload) {
+			operations.push(payload);
+		};
+
+		window.setInterval(function(){
+			if(operations.length < 1) return;
+
+			jQuery.ajaxq('operations', {
+		    type: "POST",
+		    url: "/operations",
+		    data: JSON.stringify(operations.slice(0)),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: onSubmitOperationSucceed
+			});
+
+			operations = [];
+		}, 1000);
+		
+		var onSubmitOperationSucceed = function() {
+			console.log("It worked!");
+		}
 	</script>
 </body>
 </html>

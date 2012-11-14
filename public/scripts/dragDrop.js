@@ -41,6 +41,9 @@ $(document).ready(function(){
         }
 	}
 
+  var lastPublishedX = 0;
+  var lastPublishedY = 0;
+
   /** keep up dragging */
   function watchDrag() {
     if(!drag.length) {
@@ -65,8 +68,8 @@ $(document).ready(function(){
             top = container_size.height - drag[d].size.height;
         }
 
-        var equalsLeft = drag[d].el.style.left == left;
-        var equalsTop = drag[d].el.style.top == top;
+        var equalsLeft = lastPublishedX == left;
+        var equalsTop = lastPublishedY == top;
 
         if(equalsTop && equalsLeft) return;
 
@@ -76,6 +79,9 @@ $(document).ready(function(){
 
         drag[d].el.style.left = left +'px';
         drag[d].el.style.top = top +'px';
+
+        lastPublishedX = left;
+        lastPublishedY = top;
     }
   }
 

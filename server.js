@@ -14,27 +14,7 @@ app.configure('production', function(){
 
 app.post("/operations", function(req, res) {
 	console.log("received operations");
-	
-	var clause = createOperationGroup(req.body);
-
-	db.collection('murals').update({id: 'm'}, clause, function(err){
-		console.log("operations applied: %s", req.body.length);
-		res.end();	
-	});	
+	res.end();
 });
-
-function propertyToWhere(operation) {
-	return ['widgets', operation.id, operation.propertyName].join('.');
-}
-
-function createOperationGroup(operations) {
-	var clause = {'$set': {}};
-	
-	operations.forEach(function(operation){
-		clause['$set'][propertyToWhere(operation)] = operation.propertyValue;
-	});
-
-	return clause;
-}
 
 app.listen(process.env.PORT || 5000);

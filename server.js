@@ -17,7 +17,7 @@ app.post("/operations", function(req, res) {
 
 	db.collection('murals').update({id: 'm'}, clause, function(err){
 		console.log("operations applied: %s", req.body.length);
-		
+
 		res.send();	
 	});	
 });
@@ -27,10 +27,10 @@ function propertyToWhere(operation) {
 }
 
 function createOperationGroup(operations) {
-	var clause = {'': {}};
+	var clause = {'$set': {}};
 	
 	operations.forEach(function(operation){
-		clause[''][propertyToWhere(operation)] = operation.propertyValue;
+		clause['$set'][propertyToWhere(operation)] = operation.propertyValue;
 	});
 
 	return clause;

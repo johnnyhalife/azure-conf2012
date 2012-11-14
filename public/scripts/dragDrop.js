@@ -17,7 +17,7 @@ $(document).ready(function(){
 		var color = rndColor();
 		$(e.target).css('background', color);
 
-		if(notifyBackgroundChange) 
+		if(window.notifyBackgroundChange) 
 			notifyBackgroundChange({color: color});
 	}
 
@@ -36,7 +36,8 @@ $(document).ready(function(){
         		var pos = {x: ev.touches[t].x - container_offset.left, y: ev.touches[t].y - container_offset.top}
             drag.push({el: el, size: { width: 120, height: 120 }, pos: pos});
 
-            if(notifyPositionChange) notifyPositionChange(pos);
+            if(window.notifyPositionChange) 
+            	notifyPositionChange(pos);
         }
     }
 	}

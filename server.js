@@ -13,12 +13,13 @@ app.configure('production', function(){
 });
 
 app.post("/operations", function(req, res) {
+	console.log("received operations");
+	
 	var clause = createOperationGroup(req.body);
 
 	db.collection('murals').update({id: 'm'}, clause, function(err){
 		console.log("operations applied: %s", req.body.length);
-
-		res.send();	
+		res.end();	
 	});	
 });
 

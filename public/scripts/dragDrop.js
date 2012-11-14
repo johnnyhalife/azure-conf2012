@@ -1,5 +1,7 @@
 $(document).ready(function(){
-	var drag = [];
+    if(window.loadMural) loadMural();
+
+    var drag = [];
 
 	var container = document.getElementById('canvas');
 	var container_size = container.getBoundingClientRect();
@@ -26,20 +28,17 @@ $(document).ready(function(){
 	function onDragEnd(e) {}
 
 	function onDrag(ev) {
-		drag = [];
+    	drag = [];
 
-    var touches = ev.originalEvent.touches || [ev.originalEvent];
-    for(var t=0; t < touches.length; t++) {
-        var el = touches[t].target;
+        var touches = ev.originalEvent.touches || [ev.originalEvent];
+        for(var t=0; t < touches.length; t++) {
+            var el = touches[t].target;
 
-        if(el && el.className.search('widget') > -1) {
-        		var pos = {x: ev.touches[t].x - container_offset.left, y: ev.touches[t].y - container_offset.top}
-            drag.push({el: el, size: { width: 120, height: 120 }, pos: pos});
-
-            if(window.notifyPositionChange) 
-            	notifyPositionChange(pos);
+            if(el && el.className.search('widget') > -1) {
+            		var pos = {x: ev.touches[t].x - container_offset.left, y: ev.touches[t].y - container_offset.top}
+                    drag.push({el: el, size: { width: 120, height: 120 }, pos: pos});
+            }
         }
-    }
 	}
 
   /** keep up dragging */
@@ -65,6 +64,15 @@ $(document).ready(function(){
         if(top > container_size.height - drag[d].size.height) {
             top = container_size.height - drag[d].size.height;
         }
+
+        var equalsLeft = drag[d].el.style.left == left;
+        var equalsTop = drag[d].el.style.top == top;
+
+        if(equalsTop && equalsLeft) return;
+
+        if(window.notifyPositionChange) 
+            notifyPositionChange({x: left, y: top});
+
 
         drag[d].el.style.left = left +'px';
         drag[d].el.style.top = top +'px';

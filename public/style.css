@@ -1,0 +1,16 @@
+#canvas {
+	border: 1px solid red;
+	width: 920px;
+	margin: 20px auto;
+	height: 600px;
+}
+
+	.widget {
+		border: 1px solid green;
+		width: 120px;
+		height: 120px;
+
+		position: relative;
+		left: 0px;
+		top: 0px;
+	}

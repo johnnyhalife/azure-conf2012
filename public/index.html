@@ -1,23 +1,6 @@
 <html>
 <head>
-	<style>
-		#canvas {
-			border: 1px solid red;
-			width: 920px;
-			margin: 20px auto;
-			height: 600px;
-		}
-
-		.widget {
-			border: 1px solid green;
-			width: 120px;
-			height: 120px;
-
-			position: relative;
-			left: 0px;
-			top: 0px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
 	<h1>poor-ly (poor man's version of mural.ly)</h1>
@@ -30,49 +13,9 @@
 	<script type="text/javascript" src="/components/hammer/jquery.hammer.js"></script>
 	<script type="text/javascript" src="/scripts/randomColor.js"></script>
 	<script type="text/javascript" src="/scripts/dragDrop.js"></script>
-	<script type="text/javascript" src="/scripts/jquery.ajaxq-0.0.1.js"></script>
 
 	<script type="text/javascript">
-		// here goes the fun
-		var notifyPositionChange = function(e) {
-			var operationX = {id: 1, propertyName: 'x', propertyValue: e.x};
-			submitOperation(operationX);
-
-			var operationY = {id: 1, propertyName: 'y', propertyValue: e.y};
-			submitOperation(operationY);
-		};
-		
-		var notifyBackgroundChange = function(e){
-			var operation = {id: 1, propertyName: 'color', propertyValue: e.color};
-			submitOperation(operation);
-		};
-
-		var operations = [];
-
-		var submitOperation = function(payload) {
-		  operations.push(payload);
-		};
-		
-		var onSubmitOperationSucceed = function() {
-			console.log("It worked!");
-		};
-
-		var onSubmitOperationTick = function(){
-			if(!operations.length) return;
-
-			jQuery.ajaxq('operation-queue', {
-		    type: "POST",
-		    url: "/operations",
-		    data: JSON.stringify(operations.slice(0)),
-		    contentType: "application/json; charset=utf-8",
-		    dataType: "json",
-		    success: onSubmitOperationSucceed
-			});
-
-			operations = [];
-		};
-
-		window.setInterval(onSubmitOperationTick, 1000);
+		// here goes the fun part
 	</script>
 </body>
 </html>

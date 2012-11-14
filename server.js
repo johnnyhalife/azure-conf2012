@@ -1,7 +1,4 @@
-var express = require('express'),
-		mongoskin = require('mongoskin');
-
-db = mongoskin.db(process.env.MONGOLAB_URI || "mongodb://127.0.0.1:27017/poorly?auto_reconnect=true&poolSize=20", {safe: true});
+var express = require('express');
 
 var app = express();
 

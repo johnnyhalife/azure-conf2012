@@ -20,7 +20,7 @@
 	</style>
 </head>
 <body>
-	<h1>poor-ly (poor's man version of mural.ly)</h1>
+	<h1>poor-ly (poor man's version of mural.ly)</h1>
 	<div id="canvas">
 		<div class="widget"></div>
 	</div>
@@ -28,113 +28,16 @@
 	<script type="text/javascript" src="/components/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/components/hammer/jquery.hammer.js"></script>
 	<script type="text/javascript" src="/scripts/randomColor.js"></script>
+	<script type="text/javascript" src="/scripts/dragDrop.js"></script>
 
 	<script type="text/javascript">
-		$(document).ready(function(){
+		var notifyPositionChange = function(e) {
+			console.log(e);
+		};
 
-			var container = document.getElementById('canvas');
-			var container_size = container.getBoundingClientRect();
-			var container_offset = $(container).offset();
-
-			var hammerOpts = { drag_min_distance: 0, drag_horizontal: true, drag_vertical: true, transform: false, hold: false, prevent_default: true}
-
-			$(".widget").hammer(hammerOpts)
-										.bind('dragstart', onDragStart)
-										.bind('drag', onDrag)
-										.bind('dragend', onDragEnd)
-										.bind('tap', onDragEnd)
-
-			function onDragStart(e) {
-				console.log("dragstart");
-			}
-			
-			var drag = [];
-
-			function onDrag(ev) {
-				drag = [];
-
-        var touches = ev.originalEvent.touches || [ev.originalEvent];
-        for(var t=0; t < touches.length; t++) {
-            var el = touches[t].target;
-
-            if(el && el.className.search('widget') > -1) {
-            		var pos = {x: ev.touches[t].x - container_offset.left, y: ev.touches[t].y - container_offset.top}
-                drag.push({el: el, size: { width: 120, height: 120 }, pos: pos});
-            }
-        }
-			}
-
-    /**
-     * keep up dragging
-     */
-    function watchDrag()
-    {
-        if(!drag.length) {
-            return;
-        }
-
-        for(var d = 0; d<drag.length; d++) {
-            var left = drag[d].pos.x - (drag[d].size.width / 2);
-            var top = drag[d].pos.y - (drag[d].size.height / 2);
-
-            if(left < 0) {
-                left = 0;
-            }
-            if(top < 0) {
-                top = 0;
-            }
-
-            if(left > container_size.width - drag[d].size.width) {
-                left = container_size.width - drag[d].size.width;
-            }
-            if(top > container_size.height - drag[d].size.height) {
-                top = container_size.height - drag[d].size.height;
-            }
-
-            drag[d].el.style.left = left +'px';
-            drag[d].el.style.top = top +'px';
-        }
-    }
-
-		setInterval(watchDrag, 10);
-
-
-			function onDragEnd(e) {
-				console.log("dragend");
-			}
-
-			function onTap(e) {
-				var color = rndColor();
-				$(e.target).css('background', color);
-				sendChanges({id: 1, property: 'background-color', value: color, timestamp: +new Date()});	
-			}
-
-			function sendChanges(operation) {
-  			var xhr = new XMLHttpRequest();
-	  		xhr.open('POST', '/operations', true);
-
-			  xhr.onload = function(e) {
-			    if (this.status == 200) {
-			      console.log("done");
-			      onSendChangesSucceed();
-			    }
-			  };
-
-		  	xhr.send(JSON.stringify(operation));				  
-			};
-
-			function onSendChangesSucceed() {
-				console.log("success");
-			};
-
-			function getCurrentPosition(e) {
-				var $this = $(e.target);
-				var x = parseInt($this.css('left').match(/\d+/)[0]);
-				var y = parseInt($this.css('top').match(/\d+/)[0]);
-
-				return {x: x, y: y};
-			}
-		});
+		var notifyBackgroundChange = function(e){
+			console.log(e);
+		};
 	</script>
 </body>
 </html>

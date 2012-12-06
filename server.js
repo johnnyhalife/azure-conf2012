@@ -8,23 +8,22 @@ var app = express();
 app.use(express.bodyParser());
 app.use(express.static(__dirname + '/public'));
 
-// here goes the fun part
-
 app.get("/murals/:mural", function(req, res){
 	db.collection('murals').findOne({id: req.params.mural}, function(err, m){
 		res.send(m);
 	});
 });
 
-app.post("/operations", function(req, res) {
-	console.log("we are about to flood the Db with %s operations", req.body.length);
+// here goes the fun part 
+app.post("/operations", function(req, res){
+	var operations = req.body;
+	var clause = createOperationGroup(operations);
 
-	var clause = createOperationGroup(req.body);
 	db.collection('murals').update({id: 'm'}, clause, function(err){
-		console.log(clause);
-	});
-
-	res.end();
+		// do error handling 
+		console.log("Operation successfuly sent to the database");
+		res.end();
+	});	
 });
 
 function createOperationGroup(operations) {
